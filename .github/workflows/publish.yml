@@ -1,0 +1,32 @@
+name: Publish
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [8-jdk, 11-jdk, 17-jdk]
+    runs-on: ubuntu-24.04
+    container:
+      image: eclipse-temurin:${{ matrix.java }}
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v2
+      - run: ./gradlew checkVersion build publish --stacktrace
+
+      - name: Checkout m2 repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'BookkeepersMC/m2'
+          path: './m2/'
+          ref: 'master'
+          token: ${{ secrets.GIT_PAT }}
+
+      - name: Commit artifacts to m2 repo
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          add: './io/'
+          author_name: CrypticVerse
+          cwd: "./m2/"
+          message: "Publish Better Biomes"
