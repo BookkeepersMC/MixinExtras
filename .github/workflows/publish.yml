@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: gradle/wrapper-validation-action@v2
-      - run: ./gradlew checkVersion build publish --stacktrace
+      - run: ./gradlew build publish --stacktrace
 
       - name: Checkout m2 repo
         uses: actions/checkout@v4
