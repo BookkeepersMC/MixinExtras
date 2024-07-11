@@ -5,13 +5,15 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [8-jdk, 11-jdk, 17-jdk]
+        java: [8, 11, 17]
     runs-on: ubuntu-24.04
-    container:
-      image: eclipse-temurin:${{ matrix.java }}
-      options: --user root
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
       - uses: gradle/wrapper-validation-action@v2
       - run: ./gradlew build publish --stacktrace
 
