@@ -47,20 +47,13 @@ subprojects {
     }
 
     extensions.configure<PublishingExtension> {
-        if (isLocal) {
             repositories {
                 maven {
-                    name = "Sonatype"
-                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                    authentication {
-                        credentials {
-                            username = properties["ossrhUsername"] as String
-                            password = properties["ossrhPassword"] as String
-                        }
-                    }
+                    name = "M2"
+                    url = uri("file://${rootProject.rootDir}/m2/")
                 }
             }
-        }
+
         publications {
             create<MavenPublication>("maven") {
                 groupId = "io.github.llamalad7"
