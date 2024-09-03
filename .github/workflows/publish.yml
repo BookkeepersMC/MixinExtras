@@ -4,8 +4,6 @@ on: workflow_dispatch
 jobs:
   publish:
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/openjdk/jdk:17-ubuntu
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -14,6 +12,11 @@ jobs:
           ref: master
           path: "./m2/"
           token: ${{ secrets.GIT_TOKEN }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
 
