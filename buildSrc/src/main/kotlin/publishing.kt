@@ -14,23 +14,12 @@ fun Project.configurePublishing(artifactName: String, setup: MavenPublication.()
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
-    val isLocal = (properties["isLocal"] as? String).toBoolean()
-
     extensions.configure<PublishingExtension> {
-        if (isLocal) {
             repositories {
                 maven {
-                    name = "Sonatype"
-                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                    authentication {
-                        credentials {
-                            username = properties["ossrhUsername"] as String
-                            password = properties["ossrhPassword"] as String
-                        }
-                    }
+                    url = uri("file://${rootProject.rootDir}/m2/")
                 }
             }
-        }
         publications {
             create<MavenPublication>("maven") {
                 groupId = "io.github.llamalad7"
@@ -73,9 +62,7 @@ fun Project.configurePublishing(artifactName: String, setup: MavenPublication.()
             }
         }
     }
-    if (isLocal) {
         extensions.configure<SigningExtension> {
             sign(extensions.getByType<PublishingExtension>().publications["maven"])
         }
-    }
 }

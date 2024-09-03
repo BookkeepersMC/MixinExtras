@@ -1,0 +1,29 @@
+name: Publish
+on: workflow_dispatch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/openjdk/jdk:17-ubuntu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: BookkeepersMC/m2
+          ref: master
+          path: "./m2/"
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Publish
+        run: ./gradlew :platform:notebook:publish --stacktrace
+
+      - uses: EndBug/add-and-commit@v9.1.4
+        with:
+          add: "./io/"
+          default_author: github_actions
+          cwd: "./m2/"
+          message: "Publish Notebook ME"
+

@@ -16,6 +16,9 @@ classes
 .idea
 .run
 
+# other
+!/m2
+
 # gradle
 build
 .gradle
