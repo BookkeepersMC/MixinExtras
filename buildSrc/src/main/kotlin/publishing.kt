@@ -12,7 +12,6 @@ import org.gradle.plugins.signing.SigningExtension
 fun Project.configurePublishing(artifactName: String, setup: MavenPublication.() -> Unit) {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
-    apply(plugin = "signing")
 
     extensions.configure<PublishingExtension> {
             repositories {
@@ -62,7 +61,4 @@ fun Project.configurePublishing(artifactName: String, setup: MavenPublication.()
             }
         }
     }
-        extensions.configure<SigningExtension> {
-            sign(extensions.getByType<PublishingExtension>().publications["maven"])
-        }
 }
